@@ -1,0 +1,328 @@
+/* Achievement System Styles */
+.achievement-unlock {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10000;
+}
+
+.achievement-popup {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.achievement-glow {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    animation: achievementGlow 2s ease-in-out infinite;
+}
+
+.achievement-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    animation: achievementBounce 0.8s ease-in-out;
+}
+
+.xp-gained {
+    background: linear-gradient(45deg, #ffd700, #ffed4e);
+    color: #333;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    margin-top: 10px;
+    display: inline-block;
+}
+
+/* Visual Effects */
+.firework-particle {
+    position: fixed;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    animation: firework 1s ease-out forwards;
+    z-index: 9999;
+}
+
+@keyframes firework {
+    0% {
+        transform: scale(1) translate(0, 0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(0) translate(var(--random-x, 100px), var(--random-y, -100px));
+        opacity: 0;
+    }
+}
+
+@keyframes confetti-fall {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+@keyframes screenShake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+    20%, 40%, 60%, 80% { transform: translateX(2px); }
+}
+
+@keyframes ripple {
+    0% {
+        width: 20px;
+        height: 20px;
+        opacity: 1;
+    }
+    100% {
+        width: 100px;
+        height: 100px;
+        opacity: 0;
+    }
+}
+
+@keyframes achievementGlow {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(180deg); }
+}
+
+@keyframes achievementBounce {
+    0%, 20%, 60%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-20px); }
+    80% { transform: translateY(-10px); }
+}
+
+/* 3D Card Effects */
+.card-3d {
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease;
+    will-change: transform;
+}
+
+.card-3d:hover {
+    transform: perspective(1000px) rotateY(10deg) rotateX(10deg);
+}
+
+/* Holographic Effects */
+.holographic-results {
+    background: linear-gradient(45deg, 
+        rgba(255, 0, 150, 0.1) 0%,
+        rgba(0, 255, 255, 0.1) 25%,
+        rgba(255, 255, 0, 0.1) 50%,
+        rgba(255, 0, 150, 0.1) 75%,
+        rgba(0, 255, 255, 0.1) 100%);
+    border-radius: 15px;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.holo-bar {
+    position: relative;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    overflow: hidden;
+    margin: 10px 0;
+}
+
+.holo-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00ffff, #ff00ff, #ffff00);
+    border-radius: 15px;
+    transition: width 2s ease;
+    position: relative;
+}
+
+.holo-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: holoScan 2s ease-in-out infinite;
+}
+
+@keyframes holoScan {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(200%); }
+}
+
+/* Emoji Voting Styles */
+.emoji-voting-section {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 20px;
+    padding: 25px;
+    margin: 20px 0;
+    color: white;
+}
+
+.emoji-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.emoji-option {
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 15px;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.emoji-option:hover {
+    transform: scale(1.1) rotate(5deg);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.emoji-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    background: linear-gradient(45deg, #ff6b6b, #feca57);
+    margin: 0 auto 10px;
+    animation: emojiFloat 3s ease-in-out infinite;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes emojiFloat {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+.emoji-label {
+    display: block;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+/* AI Assistant Styles */
+.ai-assistant-panel {
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    border-radius: 20px;
+    padding: 25px;
+    color: white;
+    margin: 20px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.ai-avatar {
+    font-size: 3rem;
+    text-align: center;
+    margin-bottom: 15px;
+    animation: aiPulse 2s ease-in-out infinite;
+}
+
+@keyframes aiPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.suggestion-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 15px;
+    margin: 15px 0;
+    backdrop-filter: blur(10px);
+}
+
+.suggestion-item {
+    padding: 10px;
+    margin: 5px 0;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.suggestion-item:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateX(5px);
+}
+
+.viral-score {
+    color: #ffd700;
+    font-weight: bold;
+}
+
+.viral-meter {
+    height: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.viral-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb);
+    border-radius: 5px;
+    transition: width 1s ease;
+}
+
+/* Live Statistics */
+.live-indicator {
+    display: inline-flex;
+    align-items: center;
+    background: #28a745;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.live-dot {
+    width: 8px;
+    height: 8px;
+    background: #fff;
+    border-radius: 50%;
+    margin-right: 5px;
+    animation: livePulse 1.5s ease-in-out infinite;
+}
+
+@keyframes livePulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .emoji-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .achievement-popup {
+        margin: 20px;
+        padding: 20px;
+    }
+    
+    .ai-assistant-panel {
+        margin: 10px;
+        padding: 15px;
+    }
+}

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Poll System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#" onclick="showPage('home')">
+                <i class="fas fa-poll me-2"></i>Poll System
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                                <!-- Navigation - REMOVE onclick attributes -->
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-page="home">
+                            <i class="fas fa-home me-1"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-page="polls">
+                            <i class="fas fa-list me-1"></i>Polls
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-page="create">
+                            <i class="fas fa-plus me-1"></i>Create Poll
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-page="statistics">
+                            <i class="fas fa-chart-bar me-1"></i>Statistics
+                        </a>
+                    </li>
+                </ul>
+                
+                <!-- Buttons - REMOVE onclick attributes -->
+                <button class="btn btn-light btn-lg me-3" data-page="polls">
+                    <i class="fas fa-eye me-2"></i>View Polls
+                </button>
+                <button class="btn btn-outline-light btn-lg" data-page="create">
+                    <i class="fas fa-plus me-2"></i>Create Poll
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Loading Spinner -->
+    <div id="loading" class="loading-spinner" style="display: none;">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p>Loading...</p>
+    </div>
+
+    <!-- Alert Container -->
+    <div id="alert-container" class="container mt-3"></div>
+
+    <!-- Home Page -->
+    <div id="home-page" class="page active">
+        <div class="hero-section">
+            <div class="container text-center text-white py-5">
+                <h1 class="display-4 fw-bold mb-3">
+                    <i class="fas fa-poll me-3"></i>Online Poll System
+                </h1>
+                <p class="lead mb-4">Create, share, and participate in polls with real-time results</p>
+                <button class="btn btn-light btn-lg me-3" onclick="showPage('polls')">
+                    <i class="fas fa-eye me-2"></i>View Polls
+                </button>
+                <button class="btn btn-outline-light btn-lg" onclick="showPage('create')">
+                    <i class="fas fa-plus me-2"></i>Create Poll
+                </button>
+            </div>
+        </div>
+
+        <div class="container py-5">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card feature-card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-bolt fa-3x text-primary mb-3"></i>
+                            <h5 class="card-title">Fast & Easy</h5>
+                            <p class="card-text">Create polls in seconds and get instant results</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card feature-card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-chart-line fa-3x text-success mb-3"></i>
+                            <h5 class="card-title">Real-time Results</h5>
+                            <p class="card-text">Watch results update live as votes come in</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card feature-card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-mobile-alt fa-3x text-info mb-3"></i>
+                            <h5 class="card-title">Mobile Friendly</h5>
+                            <p class="card-text">Works perfectly on all devices</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Polls List Page -->
+    <div id="polls-page" class="page">
+        <div class="container py-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-list me-2"></i>All Polls</h2>
+                <button class="btn btn-primary" onclick="showPage('create')">
+                    <i class="fas fa-plus me-2"></i>Create New Poll
+                </button>
+            </div>
+            <div id="polls-container" class="row">
+                <!-- Polls will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Poll Detail Page -->
+    <div id="poll-detail-page" class="page">
+        <div class="container py-4">
+            <button class="btn btn-outline-secondary mb-3" onclick="showPage('polls')">
+                <i class="fas fa-arrow-left me-2"></i>Back to Polls
+            </button>
+            <div id="poll-detail-content">
+                <!-- Poll detail will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Poll Page -->
+    <div id="create-page" class="page">
+        <div class="container py-4">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card shadow">
+                        <div class="card-header bg-primary text-white">
+                            <h4 class="mb-0"><i class="fas fa-plus me-2"></i>Create New Poll</h4>
+                        </div>
+                        <div class="card-body">
+                            <form id="create-poll-form">
+                                <div class="mb-3">
+                                    <label for="poll-title" class="form-label">Poll Title *</label>
+                                    <input type="text" class="form-control" id="poll-title" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="poll-description" class="form-label">Description</label>
+                                    <textarea class="form-control" id="poll-description" rows="3"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Poll Options *</label>
+                                    <div id="options-container">
+                                        <div class="input-group mb-2">
+                                            <input type="text" class="form-control option-input" placeholder="Option 1" required>
+                                            <button class="btn btn-outline-danger" type="button" onclick="removeOption(this)" disabled>
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                        <div class="input-group mb-2">
+                                            <input type="text" class="form-control option-input" placeholder="Option 2" required>
+                                            <button class="btn btn-outline-danger" type="button" onclick="removeOption(this)">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="addOption()">
+                                        <i class="fas fa-plus me-1"></i>Add Option
+                                    </button>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="poll-expires" class="form-label">Expires At (Optional)</label>
+                                    <input type="datetime-local" class="form-control" id="poll-expires">
+                                </div>
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-save me-2"></i>Create Poll
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary" onclick="showPage('polls')">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Page -->
+    <div id="statistics-page" class="page">
+        <div class="container py-4">
+            <h2 class="mb-4"><i class="fas fa-chart-bar me-2"></i>Statistics</h2>
+            <div id="statistics-content" class="row">
+                <!-- Statistics will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2025 Online Poll System. Made with ❤️</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="config.js"></script>
+    <script src="utils.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

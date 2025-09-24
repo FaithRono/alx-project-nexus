@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: poll-system-config
+  namespace: poll-system
+data:
+  DEBUG: "False"
+  DB_NAME: "poll_system"
+  DB_USER: "poll_user"
+  DB_HOST: "mysql-service"
+  DB_PORT: "3306"
+  ALLOWED_HOSTS: "localhost,127.0.0.1,poll-system.local"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: poll-system-secrets
+  namespace: poll-system
+type: Opaque
+data:
+  SECRET_KEY: ZGphbmdvLWluc2VjdXJlLXByb2R1Y3Rpb24ta2V5LWNoYW5nZS1pbi1wcm9kdWN0aW9u # base64 encoded
+  DB_PASSWORD: cG9sbF9wYXNzd29yZA== # base64 encoded "poll_password"
+  MYSQL_ROOT_PASSWORD: cm9vdF9wYXNzd29yZA== # base64 encoded "root_password"

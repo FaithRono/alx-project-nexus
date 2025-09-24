@@ -1,0 +1,693 @@
+/* ===== VARIABLES ===== */
+:root {
+    --primary: #4361ee;
+    --primary-dark: #3a56d4;
+    --secondary: #7209b7;
+    --success: #06d6a0;
+    --danger: #ef476f;
+    --warning: #ffd166;
+    --info: #118ab2;
+    --light: #f8f9fa;
+    --dark: #212529;
+    --gray: #6c757d;
+    --gray-light: #e9ecef;
+    --border-radius: 12px;
+    --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    --box-shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
+    --transition: all 0.3s ease;
+}
+
+/* ===== BASE STYLES ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: var(--dark);
+    background-color: #f8fafc;
+}
+
+/* ===== TYPOGRAPHY ===== */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--dark);
+}
+
+.display-4 {
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.lead {
+    font-size: 1.25rem;
+    font-weight: 300;
+}
+
+/* ===== NAVIGATION ===== */
+.navbar {
+    padding: 0.8rem 0;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%) !important;
+}
+
+.navbar-brand {
+    font-size: 1.8rem;
+}
+
+.navbar-nav .nav-link {
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+.navbar-nav .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* ===== BUTTONS ===== */
+.btn {
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    padding: 0.6rem 1.5rem;
+    transition: var(--transition);
+    border: none;
+}
+
+.btn-lg {
+    padding: 0.8rem 2rem;
+    font-size: 1.1rem;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    border: none;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary) 100%);
+    transform: translateY(-2px);
+    box-shadow: var(--box-shadow-hover);
+}
+
+.btn-outline-light:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.rounded-pill {
+    border-radius: 50rem !important;
+}
+
+/* ===== CARDS ===== */
+.card {
+    border: none;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--box-shadow-hover);
+}
+
+.card-header {
+    border-bottom: 1px solid var(--gray-light);
+    font-weight: 600;
+}
+
+.feature-card {
+    border: none;
+    transition: var(--transition);
+}
+
+.feature-card:hover {
+    transform: translateY(-3px);
+}
+
+.feature-icon {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.feature-card:hover .feature-icon {
+    transform: scale(1.1);
+}
+
+/* ===== HERO SECTION ===== */
+.hero-section {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.05)"/></svg>');
+    background-size: cover;
+}
+
+/* ===== LOADING OVERLAY ===== */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.loading-content {
+    text-align: center;
+}
+
+/* ===== ALERTS ===== */
+.alert {
+    border-radius: var(--border-radius);
+    border: none;
+    box-shadow: var(--box-shadow);
+    padding: 1rem 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.alert-success {
+    background: linear-gradient(135deg, var(--success) 0%, #05c290 100%);
+    color: white;
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, var(--danger) 0%, #e5365f 100%);
+    color: white;
+}
+
+.alert-info {
+    background: linear-gradient(135deg, var(--info) 0%, #0f7aa1 100%);
+    color: white;
+}
+
+/* ===== FORM STYLES ===== */
+.form-control {
+    border-radius: var(--border-radius);
+    border: 2px solid var(--gray-light);
+    padding: 0.75rem 1rem;
+    transition: var(--transition);
+}
+
+.form-control:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 0.2rem rgba(67, 97, 238, 0.25);
+}
+
+.form-label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--dark);
+}
+
+.form-text {
+    color: var(--gray);
+    font-size: 0.875rem;
+}
+
+.input-group-text {
+    background-color: var(--light);
+    border: 2px solid var(--gray-light);
+    font-weight: 600;
+}
+
+/* ===== POLL CARDS ===== */
+.poll-card {
+    transition: var(--transition);
+    border: none;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    overflow: hidden;
+}
+
+.poll-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--box-shadow-hover);
+}
+
+.poll-card .card-header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    font-weight: 600;
+}
+
+.poll-stat {
+    font-size: 0.9rem;
+    color: var(--gray);
+}
+
+.poll-stat i {
+    width: 20px;
+    color: var(--primary);
+}
+
+/* ===== BREADCRUMB ===== */
+.breadcrumb {
+    background-color: transparent;
+    padding: 0;
+    margin-bottom: 1.5rem;
+}
+
+.breadcrumb-item a {
+    color: var(--primary);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.breadcrumb-item a:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+}
+
+/* ===== PAGINATION ===== */
+.pagination .page-link {
+    border-radius: var(--border-radius);
+    margin: 0 0.2rem;
+    border: none;
+    color: var(--dark);
+    transition: var(--transition);
+}
+
+.pagination .page-link:hover {
+    background-color: var(--primary);
+    color: white;
+}
+
+.pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    border: none;
+}
+
+/* ===== FOOTER ===== */
+footer {
+    background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+}
+
+footer h5, footer h6 {
+    color: white;
+}
+
+footer a.text-muted {
+    transition: var(--transition);
+}
+
+footer a.text-muted:hover {
+    color: white !important;
+    transform: translateX(5px);
+}
+
+/* ===== BADGES ===== */
+.badge {
+    font-weight: 500;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--border-radius);
+}
+
+.badge.bg-primary {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%) !important;
+}
+
+/* ===== UTILITY CLASSES ===== */
+.text-gradient {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.shadow-sm {
+    box-shadow: var(--box-shadow) !important;
+}
+
+.shadow-lg {
+    box-shadow: var(--box-shadow-hover) !important;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 768px) {
+    .hero-section .display-4 {
+        font-size: 2.5rem;
+    }
+    
+    .hero-section .lead {
+        font-size: 1.1rem;
+    }
+    
+    .navbar-brand {
+        font-size: 1.5rem;
+    }
+    
+    .btn-lg {
+        padding: 0.6rem 1.5rem;
+        font-size: 1rem;
+    }
+    
+    .feature-icon {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .feature-icon i {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    .hero-section {
+        text-align: center;
+        padding: 2rem 0;
+    }
+    
+    .hero-section .display-4 {
+        font-size: 2rem;
+    }
+    
+    .d-flex.gap-2 {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .d-flex.gap-2 .btn {
+        width: 100%;
+        max-width: 250px;
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* ===== POLL SPECIFIC STYLES ===== */
+.poll-option {
+    border: 2px solid var(--gray-light);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.poll-option:hover {
+    border-color: var(--primary);
+    background-color: rgba(67, 97, 238, 0.05);
+}
+
+.poll-option.selected {
+    border-color: var(--primary);
+    background-color: rgba(67, 97, 238, 0.1);
+}
+
+.poll-results {
+    margin-top: 2rem;
+}
+
+.result-bar {
+    height: 8px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+    transition: width 1s ease-in-out;
+}
+
+/* ===== CUSTOM SCROLLBAR ===== */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--gray-light);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary) 100%);
+}
+
+/* ===== PAGE TRANSITIONS ===== */
+.page {
+    display: none;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.page.active {
+    display: block;
+}
+
+/* ===== FILTERS SECTION ===== */
+.filter-section {
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--box-shadow);
+}
+
+/* ===== STATS CARDS ===== */
+.stats-card {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.stats-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.stats-label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+/* ===== SOCIAL ICONS ===== */
+.social-icons a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(241, 241, 241, 0.1);
+    transition: var(--transition);
+}
+
+.social-icons a:hover {
+    background-color: var(--primary);
+    transform: translateY(-3px);
+}
+/* Add this at the end of your CSS file: */
+
+/* ===== DROPDOWN FIXES ===== */
+/* Override card overflow for dropdowns */
+.card:has(.dropdown),
+.card-modern:has(.dropdown) {
+    overflow: visible !important;
+}
+
+.card-body:has(.dropdown) {
+    overflow: visible !important;
+    position: relative;
+    z-index: 1;
+}
+
+/* Force dropdown menu visibility */
+.dropdown-menu {
+    display: block !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    transform: translateY(-10px) !important;
+    transition: all 0.3s ease !important;
+    position: absolute !important;
+    z-index: 9999 !important;
+    background-color: white !important;
+    border: 1px solid rgba(0,0,0,.15) !important;
+    border-radius: var(--border-radius) !important;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    min-width: 160px !important;
+    padding: 0.5rem 0 !important;
+    margin: 0.125rem 0 0 !important;
+}
+
+.dropdown-menu.show {
+    visibility: visible !important;
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+/* Fix dropdown positioning */
+.dropdown {
+    position: relative !important;
+    z-index: 1000 !important;
+}
+
+.dropdown-toggle::after {
+    display: inline-block !important;
+    margin-left: 0.255em !important;
+    vertical-align: 0.255em !important;
+    content: "" !important;
+    border-top: 0.3em solid !important;
+    border-right: 0.3em solid transparent !important;
+    border-bottom: 0 !important;
+    border-left: 0.3em solid transparent !important;
+}
+
+/* Style dropdown items */
+.dropdown-item {
+    display: block !important;
+    width: 100% !important;
+    padding: 0.5rem 1rem !important;
+    clear: both !important;
+    font-weight: 400 !important;
+    color: #212529 !important;
+    text-align: inherit !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+    background-color: transparent !important;
+    border: 0 !important;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out !important;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    color: #1e2125 !important;
+    background-color: #e9ecef !important;
+}
+
+/* Force delete dropdown item visibility */
+.dropdown-item.text-danger,
+.dropdown-item[onclick*="deletePoll"] {
+    display: block !important;
+    visibility: visible !important;
+    color: #dc3545 !important;
+    background-color: rgba(220, 53, 69, 0.05) !important;
+    font-weight: 500 !important;
+}
+
+.dropdown-item.text-danger:hover,
+.dropdown-item[onclick*="deletePoll"]:hover {
+    background-color: #dc3545 !important;
+    color: white !important;
+}
+
+/* Override card transforms that break dropdowns */
+.card:hover:has(.dropdown.show) {
+    transform: none !important;
+}
+
+/* Fix dropdown divider */
+.dropdown-divider {
+    height: 0 !important;
+    margin: 0.5rem 0 !important;
+    overflow: hidden !important;
+    border-top: 1px solid #e9ecef !important;
+}
+
+/* Fix for larger screens - ensure dropdown doesn't get cut off */
+@media (min-width: 992px) {
+    .dropdown-menu {
+        right: 0 !important;
+        left: auto !important;
+    }
+    
+    .dropdown-menu-end {
+        --bs-position: end !important;
+        right: 0 !important;
+        left: auto !important;
+    }
+}
+
+/* Fix dropdown button */
+.dropdown-toggle {
+    background-color: transparent !important;
+    border: 1px solid #6c757d !important;
+    color: #6c757d !important;
+    padding: 0.375rem 0.75rem !important;
+    border-radius: var(--border-radius) !important;
+}
+
+.dropdown-toggle:hover {
+    background-color: #6c757d !important;
+    color: white !important;
+}
+
+/* Prevent card animations from interfering with dropdowns */
+.card:has(.dropdown.show) {
+    transform: none !important;
+    transition: none !important;
+}
+
+.card-body:has(.dropdown.show) {
+    transform: none !important;
+    transition: none !important;
+}
+
+/* Alternative fix - make dropdown position relative to viewport */
+.dropdown-menu[data-bs-popper] {
+    position: absolute !important;
+    top: 100% !important;
+    left: 0 !important;
+    z-index: 9999 !important;
+    display: block !important;
+    min-width: 10rem !important;
+    padding: 0.5rem 0 !important;
+    margin: 0 !important;
+    font-size: 1rem !important;
+    color: #212529 !important;
+    text-align: left !important;
+    list-style: none !important;
+    background-color: #fff !important;
+    background-clip: padding-box !important;
+    border: 1px solid rgba(0,0,0,.15) !important;
+    border-radius: var(--border-radius) !important;
+}

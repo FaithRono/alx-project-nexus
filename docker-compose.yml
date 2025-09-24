@@ -1,0 +1,72 @@
+#version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: poll_system_db
+    environment:
+      MYSQL_DATABASE: poll_system
+      MYSQL_USER: poll_user
+      MYSQL_PASSWORD: poll_password
+      MYSQL_ROOT_PASSWORD: 7114
+    ports:
+      - "3400:3306"
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql-init:/docker-entrypoint-initdb.d
+      #- ./mysql/my.cnf:/etc/mysql/conf.d/my.cnf 
+    networks:
+      - poll_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 5
+      interval: 30s
+
+  web:
+    build: .
+    container_name: poll_system_web
+    environment:
+      - DEBUG=True
+      - SECRET_KEY=your-secret-key-here
+      - DB_NAME=poll_system
+      - DB_USER=poll_user
+      - DB_PASSWORD=poll_password
+      - DB_HOST=db
+      - DB_PORT=3306
+      - ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0
+    ports:
+      - "8001:8000"
+    volumes:
+      - static_volume:/app/staticfiles
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - poll_network
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+
+  nginx:
+    image: nginx:alpine
+    container_name: poll_system_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - static_volume:/var/www/static
+    depends_on:
+      - web
+    networks:
+      - poll_network
+
+volumes:
+  mysql_data:
+  static_volume:
+
+networks:
+  poll_network:
+    driver: bridge

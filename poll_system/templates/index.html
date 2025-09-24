@@ -1,0 +1,1000 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <meta name="user-authenticated" content="{% if user.is_authenticated %}true{% else %}false{% endif %}">
+    {% if user.is_authenticated %}
+    <meta name="current-user" content='{"id": {{ user.id }}, "username": "{{ user.username }}", "email": "{{ user.email }}"}'>
+    {% endif %}
+    <title>PollCraft Pro - Advanced Online Poll System</title>
+    
+    <!-- External CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/enhanced-styles.css' %}">
+    
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --primary-dark: #3730a3;
+            --secondary-color: #f59e0b;
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+            --warning-color: #f59e0b;
+            --info-color: #3b82f6;
+            --dark-color: #1f2937;
+            --light-color: #f8fafc;
+            --border-radius: 12px;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-color) !important;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        }
+        
+        .card-modern {
+            border: none;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+        
+        .card-modern:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--info-color));
+        }
+        
+        .btn-modern {
+            border-radius: 50px;
+            padding: 12px 30px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-modern:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        
+        .page {
+            display: none;
+            min-height: calc(100vh - 200px);
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        .stats-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary-color), var(--info-color));
+            color: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0.5rem 0;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        /* Voting Interface Styles */
+        .voting-option {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid #e5e7eb !important;
+        }
+        
+        .voting-option:hover {
+            border-color: var(--primary-color) !important;
+            background-color: rgba(79, 70, 229, 0.05) !important;
+            transform: translateY(-2px);
+        }
+        
+        .voting-option input[type="radio"]:checked + label {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .voting-option:has(input[type="radio"]:checked) {
+            border-color: var(--primary-color) !important;
+            background-color: rgba(79, 70, 229, 0.1) !important;
+        }
+        
+        .form-check-input:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .results-container .progress-bar {
+            transition: width 1s ease-in-out;
+        }
+        
+        .result-item {
+            animation: fadeInUp 0.5s ease;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Filter Styles */
+        .filter-active {
+            background-color: var(--primary-color) !important;
+            color: white !important;
+        }
+        
+        .poll-card {
+            transition: all 0.3s ease;
+        }
+        
+        .poll-card.filtered-out {
+            opacity: 0.3;
+            transform: scale(0.95);
+            pointer-events: none;
+        }
+        
+        /* Close button animation */
+        .poll-detail-close {
+            transition: all 0.3s ease;
+        }
+        
+        .poll-detail-close:hover {
+            transform: rotate(90deg);
+            background-color: rgba(255, 255, 255, 0.2) !important;
+        }
+
+        /* Unauthenticated state styles */
+        .auth-required-overlay {
+            position: relative;
+        }
+
+        .auth-required-overlay::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(2px);
+            z-index: 1;
+        }
+
+        .auth-required-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;"></div>
+    
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#" data-page="home">
+                <i class="fas fa-chart-pie me-2 text-primary"></i>
+                <span class="fw-bold">PollCraft Pro</span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link fw-medium" href="#" data-page="home">
+                                <i class="fas fa-home me-1"></i>Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link fw-medium" href="#" data-page="polls">
+                                <i class="fas fa-poll me-1"></i>Browse Polls
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link fw-medium" href="#" data-page="my-polls">
+                                <i class="fas fa-list me-1"></i>My Polls
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link fw-medium" href="#" data-page="create">
+                                <i class="fas fa-plus-circle me-1"></i>Create Poll
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link fw-medium" href="#" data-page="statistics">
+                                <i class="fas fa-analytics me-1"></i>Analytics
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link fw-medium" href="#" data-page="home">
+                                <i class="fas fa-home me-1"></i>Home
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+                
+                <div class="d-flex align-items-center gap-2">
+                    {% if user.is_authenticated %}
+                        <div class="dropdown">
+                            <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user me-1"></i>{{ user.username }}
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" data-page="profile"><i class="fas fa-user me-2"></i>Profile</a></li>
+                                <li><a class="dropdown-item" href="#" data-page="my-polls"><i class="fas fa-list me-2"></i>My Polls</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#" id="logoutBtn"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-primary btn-modern btn-sm" data-page="create">
+                            <i class="fas fa-plus me-1"></i>New Poll
+                        </button>
+                    {% else %}
+                        <button class="btn btn-outline-primary btn-modern btn-sm" data-bs-toggle="modal" data-bs-target="#loginModal">
+                            <i class="fas fa-sign-in-alt me-1"></i>Login
+                        </button>
+                        <button class="btn btn-primary btn-modern btn-sm" data-bs-toggle="modal" data-bs-target="#signupModal">
+                            <i class="fas fa-user-plus me-1"></i>Sign Up
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Loading Overlay -->
+    <div id="loading" class="loading-overlay" style="display: none;">
+        <div class="text-center">
+            <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;"></div>
+            <h5 class="text-primary">Loading...</h5>
+        </div>
+    </div>
+
+    <!-- Alert Container -->
+    <div id="alert-container" class="position-fixed top-0 end-0 p-3" style="z-index: 1100; margin-top: 80px;"></div>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login to PollCraft Pro
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="loginForm">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">Username</label>
+                            <input type="text" class="form-control" name="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" name="password" required>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="remember-me">
+                            <label class="form-check-label" for="remember-me">Remember me</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                        </button>
+                    </form>
+                    <div class="text-center mt-3">
+                        <small>Don't have an account? 
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#signupModal" data-bs-dismiss="modal">Sign up here</a>
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div class="modal fade" id="signupModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">
+                        <i class="fas fa-user-plus me-2"></i>Join PollCraft Pro
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="signupForm">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">Username</label>
+                            <input type="text" class="form-control" name="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" name="password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" name="confirm_password" required>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="agree-terms" required>
+                            <label class="form-check-label" for="agree-terms">
+                                I agree to the <a href="#">Terms of Service</a>
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">
+                            <i class="fas fa-user-plus me-2"></i>Create Account
+                        </button>
+                    </form>
+                    <div class="text-center mt-3">
+                        <small>Already have an account? 
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal" data-bs-dismiss="modal">Login here</a>
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main style="margin-top: 80px;">
+        {% if user.is_authenticated %}
+            <!-- Dashboard/Home Page (Authenticated) -->
+            <div id="home-page" class="page active">
+                <!-- Welcome Section -->
+                <section class="hero-gradient text-white py-5">
+                    <div class="container py-4">
+                        <div class="row align-items-center">
+                            <div class="col-lg-8">
+                                <div class="animate__animated animate__fadeInLeft">
+                                    <h1 class="display-5 fw-bold mb-3">Welcome back, {{ user.username }}!</h1>
+                                    <p class="lead mb-4 opacity-90">Ready to create engaging polls and gather insights? Let's get started!</p>
+                                    <div class="d-flex flex-wrap gap-3">
+                                        <button class="btn btn-light btn-modern" data-page="create">
+                                            <i class="fas fa-plus me-2"></i>Create New Poll
+                                        </button>
+                                        <button class="btn btn-outline-light btn-modern" data-page="polls">
+                                            <i class="fas fa-poll me-2"></i>Browse Polls
+                                        </button>
+                                        <button class="btn btn-outline-light btn-modern" data-page="my-polls">
+                                            <i class="fas fa-list me-2"></i>My Polls
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 text-center">
+                                <div class="animate__animated animate__fadeInRight">
+                                    <div class="glassmorphism p-4 rounded-4">
+                                        <i class="fas fa-user-circle fa-4x text-white opacity-80"></i>
+                                        <h5 class="mt-3 text-white">Dashboard</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quick Stats -->
+                <section class="py-5 bg-white">
+                    <div class="container">
+                        <h3 class="fw-bold mb-4">Your Quick Stats</h3>
+                        <div class="row g-4" id="statistics-content">
+                            <!-- Statistics will be loaded here -->
+                        </div>
+                    </div>
+                    
+                </section>
+                
+
+                <!-- Recent Polls -->
+                <section class="py-5 bg-light">
+                    <div class="container">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h3 class="fw-bold">Recent Polls</h3>
+                            <button class="btn btn-outline-primary btn-modern" data-page="polls">
+                                View All Polls <i class="fas fa-arrow-right ms-1"></i>
+                            </button>
+                        </div>
+                        <div id="recent-polls" class="row g-4">
+                            <!-- Recent polls will be loaded here -->
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Browse Polls Page -->
+            <div id="polls-page" class="page">
+                <div class="container py-5">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="fw-bold">Browse All Polls</h2>
+                        <button class="btn btn-primary btn-modern" data-page="create">
+                            <i class="fas fa-plus me-2"></i>Create New Poll
+                        </button>
+                    </div>
+                    
+                    <!-- Advanced Filters -->
+                    <div class="card card-modern mb-4">
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-lg-4 col-md-6">
+                                    <label class="form-label fw-medium">Search Polls</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                        <input type="text" class="form-control" id="search-polls" placeholder="Search by title or description...">
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-3">
+                                    <label class="form-label fw-medium">Sort By</label>
+                                    <select class="form-select" id="sort-polls">
+                                        <option value="newest">Newest First</option>
+                                        <option value="oldest">Oldest First</option>
+                                        <option value="popular">Most Popular</option>
+                                        <option value="trending">Trending</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-2 col-md-3">
+                                    <label class="form-label fw-medium">Status</label>
+                                    <select class="form-select" id="filter-status">
+                                        <option value="all">All Polls</option>
+                                        <option value="active">Active Only</option>
+                                        <option value="closed">Closed Only</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-2 col-md-6">
+                                    <label class="form-label fw-medium">Category</label>
+                                    <select class="form-select" id="filter-category">
+                                        <option value="all">All Categories</option>
+                                        <option value="business">Business</option>
+                                        <option value="entertainment">Entertainment</option>
+                                        <option value="education">Education</option>
+                                        <option value="technology">Technology</option>
+                                    </select>
+                                </div>
+                                   
+                                <div class="col-lg-2 col-md-6 d-flex align-items-end">
+                                    <div class="btn-group w-100">
+                                        <button class="btn btn-outline-secondary" onclick="window.app && window.app.clearFilters()">
+                                            <i class="fas fa-times me-1"></i>Clear
+                                        </button>
+                                        <button class="btn btn-primary" onclick="window.app && window.app.filterPolls()">
+                                            <i class="fas fa-filter me-1"></i>Filter
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="polls-container" class="row g-4">
+                        <!-- Polls will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- My Polls Page -->
+            <div id="my-polls-page" class="page">
+                <div class="container py-5">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="fw-bold">
+                            <i class="fas fa-list me-2"></i>My Polls
+                        </h2>
+                        <button class="btn btn-primary btn-modern" data-page="create">
+                            <i class="fas fa-plus me-2"></i>Create New Poll
+                        </button>
+                    </div>
+                    
+                    <div class="row g-4" id="user-polls">
+                        <!-- User's polls will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Create Poll Page -->
+            <div id="create-page" class="page">
+                <div class="container py-5">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="card card-modern">
+                                <div class="card-header bg-primary text-white py-4">
+                                    <div class="d-flex align-items-center">
+                                        <button class="btn btn-outline-light me-3" data-page="home">
+                                            <i class="fas fa-arrow-left"></i>
+                                        </button>
+                                        <div>
+                                            <h4 class="mb-1"><i class="fas fa-plus-circle me-2"></i>Create New Poll</h4>
+                                            <p class="mb-0 opacity-75">Build engaging polls in minutes</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body p-5">
+                                    <form id="create-poll-form">
+                                        {% csrf_token %}
+                                        <div class="mb-4">
+                                            <label for="poll-title" class="form-label fw-bold">Poll Question *</label>
+                                            <input type="text" class="form-control form-control-lg" name="title" id="poll-title" 
+                                                   placeholder="What would you like to ask?" required>
+                                            <div class="form-text">Make your question clear and engaging</div>
+                                        </div>
+                                        
+                                        <div class="mb-4">
+                                            <label for="poll-description" class="form-label fw-bold">Description</label>
+                                            <textarea class="form-control" name="description" id="poll-description" rows="3" 
+                                                      placeholder="Provide additional context (optional)"></textarea>
+                                        </div>
+                                        
+                                        <div class="mb-4">
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <label class="form-label fw-bold">Answer Options *</label>
+                                                <span class="badge bg-primary fs-6" id="option-count">2 options</span>
+                                            </div>
+                                            
+                                            <div id="options-container">
+                                                <div class="input-group mb-3">
+                                                    <span class="input-group-text fw-bold">A</span>
+                                                    <input type="text" class="form-control option-input" placeholder="First option" required>
+                                                    <button class="btn btn-outline-danger remove-option" type="button" disabled>
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="input-group mb-3">
+                                                    <span class="input-group-text fw-bold">B</span>
+                                                    <input type="text" class="form-control option-input" placeholder="Second option" required>
+                                                    <button class="btn btn-outline-danger remove-option" type="button">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            
+                                            <button type="button" class="btn btn-outline-primary btn-modern" id="add-option-btn">
+                                                <i class="fas fa-plus me-2"></i>Add Option
+                                            </button>
+                                            <div class="form-text mt-2">Add 2-10 options for your poll</div>
+                                        </div>
+                                        
+                                        <div class="row mb-4">
+                                            <div class="col-md-6">
+                                                <label for="poll-category" class="form-label fw-bold">
+                                                    <i class="fas fa-tags me-1"></i>Poll Category
+                                                </label>
+                                                <select class="form-select" name="category" id="poll-category">
+                                                    <option value="">Select category</option>
+                                                    <option value="business">🏢 Business</option>
+                                                    <option value="entertainment">🎬 Entertainment</option>
+                                                    <option value="education">📚 Education</option>
+                                                    <option value="technology">💻 Technology</option>
+                                                    <option value="general">📋 General</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="d-flex justify-content-end gap-2">
+                                            <button type="button" class="btn btn-outline-secondary btn-modern" data-page="home">
+                                                Cancel
+                                            </button>
+                                            <button type="submit" class="btn btn-primary btn-modern px-4">
+                                                <i class="fas fa-rocket me-2"></i>Create Poll
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics Page -->
+            <div id="statistics-page" class="page">
+                <div class="container py-5">
+                    <h2 class="fw-bold mb-4">
+                        <i class="fas fa-analytics me-2"></i>Analytics Dashboard
+                    </h2>
+                    
+                    <div class="row g-4 mb-5">
+                        <div class="col-lg-8">
+                            <div class="card card-modern h-100">
+                                <div class="card-header bg-white border-bottom">
+                                    <h5 class="mb-0 fw-bold">Poll Performance Overview</h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="analytics-chart" style="max-height: 400px;"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="card card-modern h-100">
+                                <div class="card-header bg-white border-bottom">
+                                    <h5 class="mb-0 fw-bold">Key Metrics</h5>
+                                </div>
+                                <div class="card-body" id="detailed-statistics">
+                                    <!-- Detailed statistics will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card card-modern">
+                        <div class="card-header bg-white border-bottom">
+                            <h5 class="mb-0 fw-bold">Top Performing Polls</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="top-polls" class="row g-3">
+                                <!-- Top polls will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Poll Detail Page -->
+            <div id="poll-detail-page" class="page">
+                <div class="container py-5">
+                    <nav aria-label="breadcrumb" class="mb-4">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#" data-page="polls">All Polls</a></li>
+                            <li class="breadcrumb-item active">Poll Details</li>
+                        </ol>
+                    </nav>
+                    
+                    <div id="poll-detail-content">
+                        <!-- Poll detail content will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+        {% else %}
+            <!-- Public Home Page (Unauthenticated) -->
+            <div id="home-page" class="page active">
+                <!-- Hero Section -->
+                <section class="hero-gradient text-white py-5">
+                    <div class="container py-5">
+                        <div class="row align-items-center">
+                            <div class="col-lg-6">
+                                <div class="animate__animated animate__fadeInLeft">
+                                    <h1 class="display-4 fw-bold mb-4">Create Powerful Polls That Drive Decisions</h1>
+                                    <p class="lead mb-4 opacity-90">Professional polling platform with real-time analytics, beautiful visualizations, and enterprise-grade features.</p>
+                                    <div class="d-flex flex-wrap gap-3">
+                                        <button class="btn btn-light btn-modern btn-lg" data-bs-toggle="modal" data-bs-target="#signupModal">
+                                            <i class="fas fa-rocket me-2"></i>Get Started Free
+                                        </button>
+                                        <button class="btn btn-outline-light btn-modern btn-lg" data-bs-toggle="modal" data-bs-target="#loginModal">
+                                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 text-center">
+                                <div class="animate__animated animate__fadeInRight">
+                                    <div class="glassmorphism p-5 rounded-4">
+                                        <i class="fas fa-chart-bar fa-5x text-white opacity-80"></i>
+                                        <h4 class="mt-3 text-white">Real-time Results</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Features Section -->
+                <section class="py-5 bg-light">
+                    <div class="container">
+                        <div class="text-center mb-5">
+                            <h2 class="fw-bold">Why Choose PollCraft Pro?</h2>
+                            <p class="lead text-muted">Advanced features for modern polling needs</p>
+                        </div>
+                        
+                        <div class="row g-4">
+                            <div class="col-lg-4 col-md-6">
+                                <div class="card card-modern h-100 text-center p-4">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-bolt fa-2x text-white"></i>
+                                    </div>
+                                    <h5 class="fw-bold mb-3">Lightning Fast</h5>
+                                    <p class="text-muted">Create and deploy polls in under 60 seconds with our streamlined interface.</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6">
+                                <div class="card card-modern h-100 text-center p-4">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-chart-pie fa-2x text-white"></i>
+                                    </div>
+                                    <h5 class="fw-bold mb-3">Real-time Analytics</h5>
+                                    <p class="text-muted">Watch results update live with beautiful charts and detailed insights.</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6">
+                                <div class="card card-modern h-100 text-center p-4">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-shield-alt fa-2x text-white"></i>
+                                    </div>
+                                    <h5 class="fw-bold mb-3">Secure & Reliable</h5>
+                                    <p class="text-muted">Enterprise-grade security with duplicate vote prevention and data protection.</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6">
+                                <div class="card card-modern h-100 text-center p-4">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-mobile-alt fa-2x text-white"></i>
+                                    </div>
+                                    <h5 class="fw-bold mb-3">Mobile Optimized</h5>
+                                    <p class="text-muted">Perfect experience across all devices and screen sizes.</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6">
+                                <div class="card card-modern h-100 text-center p-4">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-share-alt fa-2x text-white"></i>
+                                    </div>
+                                    <h5 class="fw-bold mb-3">Easy Sharing</h5>
+                                    <p class="text-muted">Share polls instantly via link, QR code, or social media platforms.</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6">
+                                <div class="card card-modern h-100 text-center p-4">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-cogs fa-2x text-white"></i>
+                                    </div>
+                                    <h5 class="fw-bold mb-3">Customizable</h5>
+                                    <p class="text-muted">Fully customizable polls with themes, colors, and branding options.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Call to Action -->
+                <section class="py-5 bg-primary text-white">
+                    <div class="container text-center">
+                        <h2 class="fw-bold mb-3">Ready to Get Started?</h2>
+                        <p class="lead mb-4">Join thousands of users who trust PollCraft Pro for their polling needs.</p>
+                        <div class="d-flex justify-content-center gap-3">
+                            <button class="btn btn-light btn-modern btn-lg" data-bs-toggle="modal" data-bs-target="#signupModal">
+                                <i class="fas fa-user-plus me-2"></i>Create Free Account
+                            </button>
+                            <button class="btn btn-outline-light btn-modern btn-lg" data-bs-toggle="modal" data-bs-target="#loginModal">
+                                <i class="fas fa-sign-in-alt me-2"></i>Login
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        {% endif %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5 class="fw-bold mb-3">PollCraft Pro</h5>
+                    <p class="text-light opacity-75">Professional polling platform for modern organizations. Create, share, and analyze polls with advanced features and real-time insights.</p>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="fw-bold mb-3">Platform</h6>
+                    <ul class="list-unstyled">
+                        {% if user.is_authenticated %}
+                            <li><a href="#" class="text-light text-decoration-none opacity-75" data-page="home">Dashboard</a></li>
+                            <li><a href="#" class="text-light text-decoration-none opacity-75" data-page="polls">Browse Polls</a></li>
+                            <li><a href="#" class="text-light text-decoration-none opacity-75" data-page="create">Create Poll</a></li>
+                            <li><a href="#" class="text-light text-decoration-none opacity-75" data-page="statistics">Analytics</a></li>
+                        {% else %}
+                            <li><a href="#" class="text-light text-decoration-none opacity-75" data-page="home">Home</a></li>
+                            <li><a href="#" class="text-light text-decoration-none opacity-75" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></li>
+                            <li><a href="#" class="text-light text-decoration-none opacity-75" data-bs-toggle="modal" data-bs-target="#signupModal">Sign Up</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="fw-bold mb-3">Resources</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light text-decoration-none opacity-75">Help Center</a></li>
+                        <li><a href="#" class="text-light text-decoration-none opacity-75">API Docs</a></li>
+                        <li><a href="#" class="text-light text-decoration-none opacity-75">Templates</a></li>
+                        <li><a href="#" class="text-light text-decoration-none opacity-75">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4">
+                    <h6 class="fw-bold mb-3">Stay Updated</h6>
+                    <p class="text-light opacity-75 mb-3">Get the latest features and updates</p>
+                    <div class="input-group">
+                        <input type="email" class="form-control" placeholder="Enter your email">
+                        <button class="btn btn-primary">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4 opacity-25">
+            <div class="text-center text-light opacity-75">
+                <p class="mb-0">&copy; 2025 PollCraft Pro. All rights reserved. Made with ❤️ by FAITH CHERONO for better decision making.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{% static 'js/config.js' %}"></script>
+    <script src="{% static 'js/utils.js' %}"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+    <script src="{% static 'js/auth.js' %}"></script>
+    <script src="{% static 'js/ai-features.js' %}"></script>
+    <script src="{% static 'js/gamification.js' %}"></script>
+    <script src="{% static 'js/visual-effects.js' %}"></script>
+
+    <!-- Add Particles.js for particle effects -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+    <!-- Add Hammer.js for gesture controls -->
+    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js"></script>
+
+    <!-- Initialize enhanced features -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        try {
+            console.log('Initializing enhanced features...');
+            
+            // Initialize features with error handling
+            if (typeof VisualEffects !== 'undefined') {
+                window.visualEffects = new VisualEffects();
+                console.log('✅ Visual effects initialized');
+            }
+            
+            if (typeof AchievementSystem !== 'undefined') {
+                window.achievementSystem = new AchievementSystem();
+                console.log('✅ Achievement system initialized');
+            }
+            
+            if (typeof UserProgression !== 'undefined') {
+                window.userProgression = new UserProgression();
+                console.log('✅ User progression initialized');
+            }
+            
+            if (typeof AIThemeGenerator !== 'undefined') {
+                window.aiThemeGenerator = new AIThemeGenerator();
+                console.log('✅ AI theme generator initialized');
+            }
+            
+            if (typeof AIAssistant !== 'undefined') {
+                window.aiAssistant = new AIAssistant();
+                console.log('✅ AI assistant initialized');
+            }
+            
+            // Apply 3D effects to cards
+            if (typeof ThreeDEffects !== 'undefined') {
+                ThreeDEffects.applyCardTilt();
+                console.log('✅ 3D effects applied');
+            }
+            
+            // Add particles background
+            if (typeof particlesJS !== 'undefined') {
+                particlesJS('particles-js', {
+                    particles: {
+                        number: { value: 50 },
+                        color: { value: '#ffffff' },
+                        opacity: { value: 0.1 },
+                        size: { value: 3 },
+                        move: { enable: true, speed: 1 }
+                    }
+                });
+                console.log('✅ Particles initialized');
+            }
+            
+            console.log('🚀 All enhanced features initialized successfully!');
+            
+        } catch (error) {
+            console.error('❌ Error initializing enhanced features:', error);
+        }
+    });
+
+    // Add event listener for add option button
+    document.addEventListener('DOMContentLoaded', function() {
+        const addOptionBtn = document.getElementById('add-option-btn');
+        if (addOptionBtn) {
+            addOptionBtn.addEventListener('click', function() {
+                if (window.app && window.app.addOption) {
+                    window.app.addOption();
+                }
+            });
+        }
+    });
+    </script>
+
+</body>
+</html>

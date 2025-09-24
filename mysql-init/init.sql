@@ -1,0 +1,13 @@
+-- Initialize MySQL database for poll system
+CREATE DATABASE IF NOT EXISTS poll_system CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- Create user with appropriate permissions
+CREATE USER IF NOT EXISTS 'poll_user'@'%' IDENTIFIED BY 'poll_password';
+GRANT ALL PRIVILEGES ON poll_system.* TO 'poll_user'@'%';
+FLUSH PRIVILEGES;
+
+-- Set MySQL settings for optimal performance
+SET GLOBAL innodb_buffer_pool_size = 134217728; -- 128MB
+SET GLOBAL max_connections = 200;
+SET GLOBAL query_cache_size = 67108864; -- 64MB
+SET GLOBAL query_cache_type = 1;
