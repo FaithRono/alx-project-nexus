@@ -20,6 +20,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link rel="stylesheet" href="{% static 'css/enhanced-styles.css' %}">
+    <!-- Add Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     
     <style>
         :root {
@@ -664,6 +666,13 @@
                                                 </select>
                                             </div>
                                         </div>
+                                        <div class="mb-4">
+                                            <label for="poll-expires-at" class="form-label fw-bold">
+                                                <i class="fas fa-calendar-alt me-1"></i>Poll Expiry Date
+                                            </label>
+                                            <input type="text" class="form-control" id="poll-expires-at" name="expires_at" placeholder="Select expiry date & time">
+                                            <div class="form-text">Optional: Set when this poll should close</div>
+                                        </div>
                                         
                                         <div class="d-flex justify-content-end gap-2">
                                             <button type="button" class="btn btn-outline-secondary btn-modern" data-page="home">
@@ -918,6 +927,9 @@
     <script src="{% static 'js/gamification.js' %}"></script>
     <script src="{% static 'js/visual-effects.js' %}"></script>
 
+    <!-- Add Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
     <!-- Add Particles.js for particle effects -->
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 
@@ -994,6 +1006,16 @@
             });
         }
     });
+    document.addEventListener('DOMContentLoaded', function() {
+    flatpickr("#poll-expires-at", {
+        enableTime: true,
+        dateFormat: "Y-m-d\\TH:i:S",
+        minDate: "today",
+        time_24hr: true,
+        altInput: true,
+        altFormat: "F j, Y H:i",
+    });
+});
     </script>
 
 </body>

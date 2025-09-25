@@ -14,7 +14,7 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
     '.onrender.com',
-    #'poll-craft-pro-pollying-system.onrender.com',  # Add your Render domain here
+    #'poll-craft-pro-pollying-system.onrender.com',  # ARender domain
 ]
 
 INSTALLED_APPS = [

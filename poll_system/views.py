@@ -179,6 +179,7 @@ def serialize_poll(poll, include_options=False):
     expires_at = None
     if poll.expires_at:
         expires_at = poll.expires_at.isoformat()
+        
     
     data = {
         'id': poll.id,
@@ -190,7 +191,7 @@ def serialize_poll(poll, include_options=False):
         'expires_at': expires_at,  # Only set if actually exists
         'vote_count': vote_count,
         'is_active': poll.is_active,
-        'created_by': poll.creator.username,
+        "creator": poll.creator.username if poll.creator else "Unknown", #displays users name automatically
     }
     
     if include_options:
@@ -289,6 +290,9 @@ def create_poll(request):
             try:
                 from datetime import datetime
                 expires_at_obj = datetime.fromisoformat(expires_at.replace('Z', '+00:00'))
+                # Make timezone-aware if needed
+                if expires_at_obj and is_naive(expires_at_obj):
+                     expires_at_obj = make_aware(expires_at_obj)
             except ValueError:
                 logger.warning(f"Invalid expiry date format: {expires_at}")
                 # Don't set expiry if invalid

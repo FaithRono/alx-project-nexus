@@ -1016,43 +1016,48 @@ class PollApp {
     // POLL CARD RENDERING (existing methods)
     // =============================================================================
 
-    renderPollCard(poll) {
-        return `
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="card card-modern h-100 poll-card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-start mb-3">
-                            <h5 class="card-title fw-bold">${escapeHtml(poll.title || 'Untitled Poll')}</h5>
-                            <span class="badge ${poll.is_active ? 'bg-success' : 'bg-secondary'}">
-                                ${poll.is_active ? 'Active' : 'Closed'}
-                            </span>
-                        </div>
-                        <p class="card-text text-muted">${escapeHtml(poll.description || 'No description')}</p>
-                        <div class="d-flex justify-content-between align-items-center mt-3">
-                            <small class="text-muted">
-                                <i class="fas fa-users me-1"></i>${formatNumber(poll.vote_count || 0)} votes
-                            </small>
-                            <small class="text-muted">
-                                <i class="fas fa-calendar me-1"></i>${this.formatDate(poll.created_at)}
-                            </small>
-                        </div>
+   renderPollCard(poll) {
+    return `
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card card-modern h-100 poll-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h5 class="card-title fw-bold">${escapeHtml(poll.title || 'Untitled Poll')}</h5>
+                        <span class="badge ${poll.is_active ? 'bg-success' : 'bg-secondary'}">
+                            ${poll.is_active ? 'Active' : 'Closed'}
+                        </span>
                     </div>
-                    <div class="card-footer bg-transparent">
-                        <div class="d-flex gap-2">
-                            <button class="btn btn-primary btn-modern flex-fill" onclick="window.app.viewPoll(${poll.id})">
-                                <i class="fas fa-vote-yea me-2"></i>Vote Now
-                            </button>
-                            <button class="btn btn-outline-secondary btn-modern" onclick="window.app.viewResults(${poll.id})" title="View Results">
-                                <i class="fas fa-chart-bar"></i>
-                            </button>
-                        </div>
+                    <p class="card-text text-muted">${escapeHtml(poll.description || 'No description')}</p>
+                    <!-- Add creator name here -->
+                    <div class="mb-2">
+                        <small class="text-muted">
+                            <i class="fas fa-user me-1"></i>
+                            Created by: <strong>${escapeHtml(poll.creator || 'Unknown')}</strong>
+                        </small>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <small class="text-muted">
+                            <i class="fas fa-users me-1"></i>${formatNumber(poll.vote_count || 0)} votes
+                        </small>
+                        <small class="text-muted">
+                            <i class="fas fa-calendar me-1"></i>${this.formatDate(poll.created_at)}
+                        </small>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-primary btn-modern flex-fill" onclick="window.app.viewPoll(${poll.id})">
+                            <i class="fas fa-vote-yea me-2"></i>Vote Now
+                        </button>
+                        <button class="btn btn-outline-secondary btn-modern" onclick="window.app.viewResults(${poll.id})" title="View Results">
+                            <i class="fas fa-chart-bar"></i>
+                        </button>
                     </div>
                 </div>
             </div>
-        `;
-    }
-
-    
+        </div>
+    `;
+}
 
         
     // Replace the dropdown section in renderUserPollCard with this:
@@ -1141,12 +1146,14 @@ class PollApp {
             showAlert('Please provide at least 2 options', 'warning');
             return;
         }
+        // const expiresAT = document.getElementById('poll-expires-at').value;
 
         const pollData = {
             title: formData.get('title'),
             description: formData.get('description') || '',
             category: formData.get('category') || '',
-            options: options
+            options: options,
+            // expires_at: expires_AT || null
         };
 
         const submitBtn = form.querySelector('button[type="submit"]');
