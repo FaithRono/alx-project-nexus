@@ -13,7 +13,8 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
-    'poll-craft-pro-pollying-system.onrender.com',  # Add your Render domain here
+    '.onrender.com',
+    #'poll-craft-pro-pollying-system.onrender.com',  # Add your Render domain here
 ]
 
 INSTALLED_APPS = [
