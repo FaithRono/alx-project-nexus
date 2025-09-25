@@ -6,18 +6,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-local-development-key-change-this')
 DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
-RAILWAY_ENVIRONMENT = os.environ.get('RAILWAY_ENVIRONMENT_NAME')
 
-if RAILWAY_ENVIRONMENT:
-    ALLOWED_HOSTS = [
-        '.onrender.com'
-        'localhost',
-        '127.0.0.1'
-    ]
-    SECURE_BROWSER_XSS_FILTER = True
-    SECURE_CONTENT_TYPE_NOSNIFF = True
-else:
-    ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+    'poll-craft-pro-pollying-system.onrender.com',  # Add your Render domain here
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -61,7 +58,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'poll_system.wsgi.application'
 
-if RAILWAY_ENVIRONMENT and 'DATABASE_URL' in os.environ:
+# Use DATABASE_URL if set, otherwise fallback to SQLite
+if 'DATABASE_URL' in os.environ:
     DATABASES = {
         'default': dj_database_url.parse(
             os.environ.get('DATABASE_URL'),
@@ -74,7 +72,6 @@ else:
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': BASE_DIR / 'db.sqlite3',
-            
         }
     }
 
