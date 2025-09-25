@@ -42,4 +42,4 @@ HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
 
 # Start server
 # CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "poll_system.wsgi:application"
-CMD gunicorn poll_system.wsgi:application --bind 0.0.0.0:$PORT
+CMD python manage.py migrate && gunicorn poll_system.wsgi:application --bind 0.0.0.0:$PORT
