@@ -3,7 +3,7 @@ from . import views
 from .views import (
     PollListView, PollCreateView, PollDetailView,
     VoteCreateView, poll_results, poll_statistics,
-    my_polls, analytics_detailed, analytics_top_polls  # Add these imports
+    my_polls, analytics_detailed, analytics_top_polls 
 )
 
 app_name = 'poll_system'
@@ -17,15 +17,15 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
     
-    # API endpoints for JavaScript frontend - FIXED PATHS
+    # API endpoints for JavaScript frontend - PATHS
     path('api/polls/', PollListView.as_view(), name='api_poll_list'),
     path('api/polls/create/', PollCreateView.as_view(), name='api_poll_create'),
     path('api/polls/<int:pk>/', PollDetailView.as_view(), name='api_poll_detail'),
     path('api/polls/<int:pk>/vote/', VoteCreateView.as_view(), name='api_poll_vote'),
     path('api/polls/<int:pk>/results/', poll_results, name='api_poll_results'),
-    path('api/my-polls/', my_polls, name='api_my_polls'),  # FIXED: Added this endpoint
+    path('api/my-polls/', my_polls, name='api_my_polls'),
     
-    # Analytics API endpoints - CHANGE TO MATCH JAVASCRIPT
+    # Analytics API endpoints -MATCHES JAVASCRIPT
     path('api/statistics/', poll_statistics, name='api_statistics'),
     path('api/statistics/detailed/', analytics_detailed, name='api_statistics_detailed'),
     path('api/statistics/top-polls/', analytics_top_polls, name='api_statistics_top_polls'),

@@ -12,6 +12,7 @@ from django.db import IntegrityError
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from functools import wraps
+from django.utils.timezone import make_aware, is_naive
 import logging
 
 # Import your models
@@ -303,17 +304,17 @@ def create_poll(request):
             title=title,
             description=description,
             category=category,
-            creator=request.user,  # Your model uses 'creator'
+            creator=request.user,  # model uses 'creator'
             expires_at=expires_at_obj  # Only set if provided and valid
         )
         
-        # Create poll options - NO ORDER FIELD (your model doesn't have it)
+        # Create poll options 
         for option_text in options:
             if option_text.strip():
                 PollOption.objects.create(
                     poll=poll,
-                    text=option_text.strip()
-                    # No 'order' field - your model doesn't have it
+                    text=option_text.strip(
+                    )
                 )
         
         logger.info(f"Poll created successfully by {request.user.username}: {title}")
@@ -348,8 +349,6 @@ def poll_detail(request, poll_id):
             'success': False,
             'error': 'Unable to load poll details'
         }, status=500)
-
-# Add these methods to your views:
 
 @json_login_required
 def delete_poll(request, poll_id):
@@ -456,7 +455,7 @@ def vote_poll(request, poll_id):
             existing_vote.option = option
             existing_vote.save()
             message = 'Vote updated successfully!'
-        else:  # FIXED: Added proper indentation and else structure
+        else: 
             # Create new vote
             Vote.objects.create(
                 poll=poll,
@@ -563,8 +562,6 @@ def poll_results(request, poll_id):
             'success': False,
             'error': 'Unable to load poll results'
         }, status=500)
-# ADD THESE FUNCTIONS TO YOUR EXISTING VIEWS.PY
-
 @require_http_methods(["GET"])
 def detailed_statistics(request):
     """Detailed analytics endpoint that frontend expects"""
@@ -640,7 +637,7 @@ def top_polls(request):
             'error': 'Unable to load top polls'
         }, status=500)
 
-# UPDATE YOUR EXISTING poll_detail FUNCTION TO HANDLE PUT AND DELETE
+# FUNCTION TO HANDLE PUT AND DELETE
 @require_http_methods(["GET", "PUT", "DELETE"])
 def poll_detail(request, poll_id):
     """Handle GET, PUT, and DELETE for individual polls"""
@@ -722,7 +719,7 @@ def poll_detail(request, poll_id):
             'error': f'Operation failed: {str(e)}'
         }, status=500)
 
-# UPDATE YOUR analytics_data FUNCTION TO MATCH FRONTEND EXPECTATIONS
+# FUNCTION TO MATCH FRONTEND EXPECTATIONS
 @require_http_methods(["GET"])
 def analytics_data(request):
     """Get analytics data - updated to match frontend field names"""
@@ -735,7 +732,7 @@ def analytics_data(request):
         # Calculate average participation
         avg_participation = 0
         if total_polls > 0:
-            # Simplified calculation - you can enhance this
+            # Simplified calculation 
             avg_participation = round((total_votes / total_polls), 2)
         
         return JsonResponse({

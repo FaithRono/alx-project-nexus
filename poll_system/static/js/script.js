@@ -1,5 +1,5 @@
 /**
- * Poll System Main Application - Enhanced Version
+ * Poll System Main Application
  * Handles navigation, polls, voting, and user interactions with full CRUD operations
  */
 
@@ -323,8 +323,7 @@ class PollApp {
         }
     }
 
-        // Add these methods to your PollApp class:
-    
+     // Add these methods to your PollApp class:
     async loadQuickStats() {
         console.log('Loading quick stats...');
         const container = document.getElementById('statistics-content');
@@ -408,8 +407,7 @@ class PollApp {
         `;
     }
     
-        // Replace your displayFallbackStats method:
-    
+        // displayFallbackStats method:
     displayFallbackStats() {
         console.log('📊 Displaying fallback stats');
         console.log('📊 Available userPolls:', this.userPolls);
@@ -882,7 +880,7 @@ class PollApp {
     }
 
     // =============================================================================
-    // SEARCH AND FILTER FUNCTIONALITY - FIXED IMPLEMENTATION
+    // SEARCH AND FILTER FUNCTIONALITY 
     // =============================================================================
 
     filterPolls() {
@@ -1146,14 +1144,14 @@ class PollApp {
             showAlert('Please provide at least 2 options', 'warning');
             return;
         }
-        // const expiresAT = document.getElementById('poll-expires-at').value;
+        const expiresAT = document.getElementById('poll-expires-at').value;
 
         const pollData = {
             title: formData.get('title'),
             description: formData.get('description') || '',
             category: formData.get('category') || '',
             options: options,
-            // expires_at: expires_AT || null
+            expires_at: expiresAT || null
         };
 
         const submitBtn = form.querySelector('button[type="submit"]');

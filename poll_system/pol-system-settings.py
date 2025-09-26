@@ -29,7 +29,7 @@ INSTALLED_APPS = [
     
     # Local apps
     #'polls',
-    'poll_system' # ← Use full config path
+    'poll_system' 
     
 ]
 

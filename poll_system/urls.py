@@ -225,7 +225,7 @@ urlpatterns = [
     path('accounts/register/', views.api_register, name='api_register'),
     path('accounts/logout/', views.api_logout, name='api_logout'),
     
-    # ✅ POLL MANAGEMENT ENDPOINTS (UPDATED TO MATCH FRONTEND)
+    # ✅ POLL MANAGEMENT ENDPOINTS (FRONTEND)
     path('api/polls/', views.api_polls, name='api_polls'),  # GET all polls
     path('api/polls/create/', views.create_poll, name='create_poll'),  # CREATE poll (frontend expects this)
     path('api/my-polls/', views.api_my_polls, name='api_my_polls'),  # User's polls
@@ -235,7 +235,7 @@ urlpatterns = [
     path('api/polls/<int:poll_id>/vote/', views.vote_poll, name='vote_poll'),
     path('api/polls/<int:poll_id>/results/', views.poll_results, name='poll_results'),
     
-    # ✅ ANALYTICS ENDPOINTS (ADD THESE - frontend expects these exact URLs)
+    # ✅ ANALYTICS ENDPOINTS (frontend expects these exact URLs)
     path('api/statistics/', views.api_statistics, name='api_statistics'),
     path('api/statistics/', views.analytics_data, name='statistics_data'),
     path('api/statistics/detailed/', views.detailed_statistics, name='detailed_statistics'),

@@ -526,7 +526,7 @@ footer a.text-muted:hover {
     background-color: var(--primary);
     transform: translateY(-3px);
 }
-/* Add this at the end of your CSS file: */
+
 
 /* ===== DROPDOWN FIXES ===== */
 /* Override card overflow for dropdowns */
